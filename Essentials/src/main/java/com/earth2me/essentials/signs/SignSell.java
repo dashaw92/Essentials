@@ -4,8 +4,10 @@ import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.User;
+import me.danny.essapi.EssItemSellEvent;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
@@ -44,6 +46,14 @@ public class SignSell extends EssentialsSign {
                 money = new Trade(pricePerSingleItem, ess);
             }
         }
+
+        final EssItemSellEvent sellEvent = new EssItemSellEvent(player.getBase(), charge.getItemStack(), money.getMoney(), EssItemSellEvent.SellSource.SIGN);
+        Bukkit.getPluginManager().callEvent(sellEvent);
+        if(sellEvent.isCancelled()) {
+            return false;
+        }
+
+        money = new Trade(sellEvent.getValue(), ess);
 
         charge.isAffordableFor(player);
         money.pay(player, OverflowType.DROP);

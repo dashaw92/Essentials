@@ -4,7 +4,9 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
+import me.danny.essapi.EssItemSellEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -103,7 +105,7 @@ public class Commandsell extends EssentialsCommand {
             return BigDecimal.ZERO;
         }
 
-        final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
+        BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
 
         //TODO: Prices for Enchantments
         final ItemStack ris = is.clone();
@@ -112,6 +114,15 @@ public class Commandsell extends EssentialsCommand {
             // This should never happen.
             throw new IllegalStateException("Trying to remove more items than are available.");
         }
+
+        final EssItemSellEvent sellEvent = new EssItemSellEvent(user.getBase(), ris, result, EssItemSellEvent.SellSource.COMMAND);
+        Bukkit.getPluginManager().callEvent(sellEvent);
+        if(sellEvent.isCancelled()) {
+            return BigDecimal.ZERO;
+        }
+
+        result = sellEvent.getValue();
+
         user.getBase().getInventory().removeItem(ris);
         user.getBase().updateInventory();
         Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), user.getMoney(), ess);
