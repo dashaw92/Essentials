@@ -7,8 +7,10 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.ItemUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import me.danny.essapi.kits.KitProvider;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
 import org.bukkit.Bukkit;
@@ -26,7 +28,7 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class Kit {
+public class Kit implements KitProvider<String> {
     final IEssentials ess;
     final String kitName;
     final Map<String, Object> kit;
@@ -43,46 +45,18 @@ public class Kit {
         }
     }
 
+    @Override
     public String getName() {
         return kitName;
     }
 
-    public void checkPerms(final User user) throws Exception {
-        if (!user.isAuthorized("essentials.kits." + kitName)) {
-            throw new Exception(tl("noKitPermission", "essentials.kits." + kitName));
-        }
+    @Override
+    public Trade getCharge() {
+        return charge;
     }
 
-    public void checkDelay(final User user) throws Exception {
-        final long nextUse = getNextUse(user);
 
-        if (nextUse == 0L) {
-        } else if (nextUse < 0L) {
-            user.sendMessage(tl("kitOnce"));
-            throw new NoChargeException();
-        } else {
-            user.sendMessage(tl("kitTimed", DateUtil.formatDateDiff(nextUse)));
-            throw new NoChargeException();
-        }
-    }
-
-    public void checkAffordable(final User user) throws Exception {
-        charge.isAffordableFor(user);
-    }
-
-    public void setTime(final User user) throws Exception {
-        final Calendar time = new GregorianCalendar();
-        user.setKitTimestamp(kitName, time.getTimeInMillis());
-    }
-
-    public void resetTime(final User user) {
-        user.setKitTimestamp(kitName, 0);
-    }
-
-    public void chargeUser(final User user) throws Exception {
-        charge.charge(user);
-    }
-
+    @Override
     public long getNextUse(final User user) throws Exception {
         if (user.isAuthorized("essentials.kit.exemptdelay")) {
             return 0L;
@@ -127,6 +101,7 @@ public class Kit {
         return getItems();
     }
 
+    @Override
     public List<String> getItems() throws Exception {
         if (kit == null) {
             throw new Exception(tl("kitNotFound"));
@@ -151,10 +126,12 @@ public class Kit {
         }
     }
 
+    @Override
     public boolean expandItems(final User user) throws Exception {
-        return expandItems(user, getItems(user));
+        return expandItems(user, getItems());
     }
 
+    @Override
     public boolean expandItems(final User user, final List<String> items) throws Exception {
         try {
             final IText input = new SimpleTextInput(items);
@@ -205,16 +182,16 @@ public class Kit {
                     final ItemStack stack = metaStack.getItemStack();
                     final Material material = stack.getType();
                     final PlayerInventory inventory = user.getBase().getInventory();
-                    if (MaterialUtil.isHelmet(material) && isEmptyStack(inventory.getHelmet())) {
+                    if (MaterialUtil.isHelmet(material) && ItemUtil.isEmptyStack(inventory.getHelmet())) {
                         inventory.setHelmet(stack);
                         continue;
-                    } else if (MaterialUtil.isChestplate(material) && isEmptyStack(inventory.getChestplate())) {
+                    } else if (MaterialUtil.isChestplate(material) && ItemUtil.isEmptyStack(inventory.getChestplate())) {
                         inventory.setChestplate(stack);
                         continue;
-                    } else if (MaterialUtil.isLeggings(material) && isEmptyStack(inventory.getLeggings())) {
+                    } else if (MaterialUtil.isLeggings(material) && ItemUtil.isEmptyStack(inventory.getLeggings())) {
                         inventory.setLeggings(stack);
                         continue;
-                    } else if (MaterialUtil.isBoots(material) && isEmptyStack(inventory.getBoots())) {
+                    } else if (MaterialUtil.isBoots(material) && ItemUtil.isEmptyStack(inventory.getBoots())) {
                         inventory.setBoots(stack);
                         continue;
                     }
@@ -280,7 +257,4 @@ public class Kit {
         return true;
     }
 
-    private boolean isEmptyStack(ItemStack stack) {
-        return stack == null || stack.getType().isAir();
-    }
 }
