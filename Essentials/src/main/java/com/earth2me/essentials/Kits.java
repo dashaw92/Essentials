@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.NumberUtil;
+import me.danny.essapi.kits.KitDelay;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 
@@ -115,10 +116,10 @@ public class Kits implements IConf {
                     }
 
                     final Kit kit = new Kit(kitItem, ess);
-                    final double nextUse = kit.getNextUse(user);
-                    if (nextUse == -1 && ess.getSettings().isSkippingUsedOneTimeKitsFromKitList()) {
+                    final KitDelay nextUse = kit.getNextUse(user);
+                    if (nextUse == KitDelay.ONE_USE_KIT && ess.getSettings().isSkippingUsedOneTimeKitsFromKitList()) {
                         continue;
-                    } else if (nextUse != 0) {
+                    } else if (nextUse instanceof KitDelay.Delay) {
                         name = tl("kitDelay", name);
                     }
 
