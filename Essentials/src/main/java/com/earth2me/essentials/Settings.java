@@ -134,6 +134,16 @@ public class Settings implements net.ess3.api.ISettings {
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
     private Map<String, String> worldAliases;
+    private boolean useDannyKits;
+
+    private boolean _isUsingDannyKits() {
+        return config.getBoolean("use-danny-kits", false);
+    }
+
+    @Override
+    public boolean isUsingDannyKits() {
+        return useDannyKits;
+    }
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
@@ -752,6 +762,7 @@ public class Settings implements net.ess3.api.ISettings {
         bindingItemPolicy = _getBindingItemsPolicy();
         currencySymbol = _getCurrencySymbol();
         worldAliases = _getWorldAliases();
+        useDannyKits = _isUsingDannyKits();
 
         reloadCount.incrementAndGet();
     }
