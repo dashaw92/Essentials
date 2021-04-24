@@ -6,25 +6,22 @@ package me.danny.essapi.kits;
  */
 public sealed interface KitDelay {
 
-    KitDelay NO_DELAY = new NoDelay();
-    KitDelay ONE_USE_KIT = new OneUseKit();
-
     /**
-     * The kit has no delay between uses, or is ready to be used again
+     * Re-export of KitDelayPredefined::NO_DELAY
      */
-    final class NoDelay implements KitDelay {
-        private NoDelay() {}
-    }
-
+    KitDelay NO_DELAY = _Predefined.NO_DELAY;
     /**
-     * The kit can be only used one time
+     * Re-export of KitDelayPredefined::ONE_USE_KIT
      */
-    final class OneUseKit implements KitDelay {
-        private OneUseKit() {}
-    }
+    KitDelay ONE_USE_KIT = _Predefined.ONE_USE_KIT;
 
     /**
      * There is a delay before the kit may be used again
      */
     record Delay(long delay) implements KitDelay {}
+
+    enum _Predefined implements KitDelay {
+        NO_DELAY,
+        ONE_USE_KIT
+    }
 }

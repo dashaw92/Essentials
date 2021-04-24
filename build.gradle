@@ -6,9 +6,6 @@ buildscript  {
 
 plugins {
     id 'org.ajoberstar.grgit' version '4.1.0'
-    id 'net.kyori.indra' version "$indraVersion" apply false
-    id 'net.kyori.indra.checkstyle' version "$indraVersion" apply false
-    id 'net.kyori.indra.publishing' version "$indraVersion" apply false
     id 'com.github.johnrengelman.shadow' version '6.1.0' apply false
 }
 
@@ -41,17 +38,13 @@ ext {
 
     fullVersion = "${version}".replace("-SNAPSHOT", "-dev+${GIT_DEPTH}-${GIT_COMMIT}")
 
-    checkstyleVersion = '8.36.2'
     spigotVersion = '1.16.5-R0.1-SNAPSHOT'
     junit5Version = '5.7.0'
     mockitoVersion = '3.2.0'
 }
 
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'net.kyori.indra'
-    apply plugin: 'net.kyori.indra.checkstyle'
-    apply plugin: 'net.kyori.indra.publishing'
+    apply plugin: 'java-library'
     apply plugin: 'com.github.johnrengelman.shadow'
 
     repositories {
@@ -67,11 +60,6 @@ subprojects {
             url = 'https://repo.codemc.org/repository/maven-public'
             content {
                 includeGroup "org.bstats"
-            }
-        }
-        mavenCentral() {
-            content {
-                includeGroup "net.kyori"
             }
         }
     }
@@ -101,43 +89,9 @@ subprojects {
 
     }
 
-    indra {
-        checkstyle = "$checkstyleVersion"
-
-        github('EssentialsX', 'Essentials')
-        gpl3OnlyLicense()
-
-        publishReleasesTo('essx', 'https://repo.essentialsx.net/releases/')
-        publishSnapshotsTo('essx', 'https://repo.essentialsx.net/snapshots/')
-
-        configurePublications {
-            pom {
-                description = 'The essential plugin suite for Minecraft servers.'
-                url = 'https://essentialsx.net'
-                developers {
-                    developer {
-                        id = 'mdcfe'
-                        name = 'MD'
-                        email = 'md@n3fs.co.uk'
-                    }
-                    developer {
-                        id = 'pop4959'
-                    }
-                    developer {
-                        id = 'JRoy'
-                        name = 'Josh Roy'
-                    }
-                }
-                ciManagement {
-                    system = 'Jenkins'
-                    url = 'https://ci.ender.zone/job/EssentialsX'
-                }
-            }
-        }
-    }
-
-    compileJava {
-        options.compilerArgs.add('-Xlint:-deprecation')
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = 16
+        options.compilerArgs.addAll(['--enable-preview', '-Xlint:-deprecation'])
     }
 
     javadoc {
