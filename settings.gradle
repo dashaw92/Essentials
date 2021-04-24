@@ -9,6 +9,7 @@ rootProject.name = 'EssentialsXParent'
         "Protect",
         "Spawn",
         "XMPP",
+        "DannyKits",
 ].each {
     include(":EssentialsX$it")
     project(":EssentialsX$it").projectDir = file("Essentials$it")

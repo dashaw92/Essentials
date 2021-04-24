@@ -1,7 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.NumberUtil;
-import me.danny.essapi.kits.KitDelay;
+import me.danny.essapi.KitDelay;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 

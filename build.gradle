@@ -113,7 +113,7 @@ subprojects {
 def outputTasks() {
     [":EssentialsX:shadowJar", ":EssentialsXAntiBuild:jar", ":EssentialsXChat:jar",
      ":EssentialsXGeoIP:shadowJar", ":EssentialsXProtect:jar", ":EssentialsXSpawn:jar",
-     ":EssentialsXXMPP:shadowJar"].stream().map({ tasks.findByPath(it) })
+     ":EssentialsXXMPP:shadowJar", ":EssentialsXDannyKits:shadowJar"].stream().map({ tasks.findByPath(it) })
 }
 
 task copyToJars(type: Copy) {

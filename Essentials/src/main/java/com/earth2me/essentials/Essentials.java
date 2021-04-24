@@ -17,11 +17,7 @@
  */
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.commands.EssentialsCommand;
-import com.earth2me.essentials.commands.IEssentialsCommand;
-import com.earth2me.essentials.commands.NoChargeException;
-import com.earth2me.essentials.commands.NotEnoughArgumentsException;
-import com.earth2me.essentials.commands.QuietAbortException;
+import com.earth2me.essentials.commands.*;
 import com.earth2me.essentials.items.AbstractItemDb;
 import com.earth2me.essentials.items.CustomItemResolver;
 import com.earth2me.essentials.items.FlatItemDb;
@@ -39,56 +35,21 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
-import net.ess3.api.Economy;
+import me.danny.essapi.KitProvider;
 import net.ess3.api.IEssentials;
-import net.ess3.api.IItemDb;
-import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
-import net.ess3.nms.refl.providers.ReflFormattedCommandAliasProvider;
-import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
-import net.ess3.nms.refl.providers.ReflServerStateProvider;
-import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
-import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
-import net.ess3.nms.refl.providers.ReflSyncCommandsProvider;
-import net.ess3.provider.ContainerProvider;
-import net.ess3.provider.FormattedCommandAliasProvider;
-import net.ess3.provider.KnownCommandsProvider;
-import net.ess3.provider.MaterialTagProvider;
-import net.ess3.provider.PotionMetaProvider;
-import net.ess3.provider.ProviderListener;
-import net.ess3.provider.ServerStateProvider;
-import net.ess3.provider.SpawnEggProvider;
-import net.ess3.provider.SpawnerBlockProvider;
-import net.ess3.provider.SpawnerItemProvider;
-import net.ess3.provider.SyncCommandsProvider;
-import net.ess3.provider.providers.BasePotionDataProvider;
-import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
-import net.ess3.provider.providers.BukkitMaterialTagProvider;
-import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
-import net.ess3.provider.providers.FlatSpawnEggProvider;
-import net.ess3.provider.providers.LegacyPotionMetaProvider;
-import net.ess3.provider.providers.LegacySpawnEggProvider;
-import net.ess3.provider.providers.PaperContainerProvider;
-import net.ess3.provider.providers.PaperKnownCommandsProvider;
-import net.ess3.provider.providers.PaperMaterialTagProvider;
-import net.ess3.provider.providers.PaperRecipeBookListener;
-import net.ess3.provider.providers.PaperServerStateProvider;
+import net.ess3.api.*;
+import net.ess3.nms.refl.providers.*;
+import net.ess3.provider.*;
+import net.ess3.provider.providers.*;
 import net.essentialsx.api.v2.services.BalanceTop;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.command.BlockCommandSender;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.WorldLoadEvent;
@@ -105,13 +66,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -152,6 +107,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
+    private transient KitProvider<?> kitProvider;
 
     static {
         // TODO: improve legacy code
@@ -419,6 +375,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             throw ex;
         }
         getBackup().setPendingShutdown(false);
+    }
+
+    @Override
+    public KitProvider<?> getKitProvider() {
+        return kitProvider;
     }
 
     @Override

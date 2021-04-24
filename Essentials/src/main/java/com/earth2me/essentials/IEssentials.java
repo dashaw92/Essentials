@@ -5,14 +5,8 @@ import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
-import net.ess3.provider.MaterialTagProvider;
-import net.ess3.provider.ContainerProvider;
-import net.ess3.provider.FormattedCommandAliasProvider;
-import net.ess3.provider.KnownCommandsProvider;
-import net.ess3.provider.ServerStateProvider;
-import net.ess3.provider.SpawnerBlockProvider;
-import net.ess3.provider.SpawnerItemProvider;
-import net.ess3.provider.SyncCommandsProvider;
+import me.danny.essapi.KitProvider;
+import net.ess3.provider.*;
 import net.essentialsx.api.v2.services.BalanceTop;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -29,6 +23,9 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 public interface IEssentials extends Plugin {
+
+    KitProvider<?> getKitProvider();
+
     void addReloadListener(IConf listener);
 
     void reload();

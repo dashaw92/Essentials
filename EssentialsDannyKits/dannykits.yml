@@ -1,0 +1,70 @@
+# Rough draft of new kit config file format
+# kits:
+#   <kit name>:
+#     delay: int or "once"
+#     items: list of items, see item format below
+#     money: double
+#     commands: list of commands to execute, see commands format below
+#
+# Delay: Minimum elapsed time between kit uses, or "once" for only one claim per UUID
+#        Defaults to "not configured" for one time use and gives a warning in console (KitDelay.NOT_CONFIGURED)
+#
+#
+# Items: An item follows the following schema:
+#   type: material, can be an essentials item db material
+#   quantity: amount in the stack
+#             Defaults to 1
+#   enchants: list of enchants, can be essentials mapped enchants, followed by the level
+#             Defaults to no enchantments
+#   name: custom name of the item with color codes allowed
+#             Defaults to no custom name
+#   lore: list of strings to be in the lore
+#             Defaults to no custom lore
+#   data: {key: value} pairs to set on the item in persistent data, by plugin.
+#             Defaults to no custom data.
+#             Values support int, double, string, and int[].
+#             Booleans are supported, but are mapped to int { true => 1, false => 0 }
+#             Order of coercion: double => int => boolean => string
+#
+#
+# Money: Optional double amount to gift the recipient of the kit.
+#        Negative amounts are interpreted as no money granted. Use the pre-existing kit charge construct in 
+#        Essentials to take money
+#
+#
+# Commands are strings that will be executed by the console when the kit is claimed.
+# Replacements:
+# - {PLAYER} => recipient's IGN
+# - {UUID} => recipients's UUID
+# - {KIT} => name of the kit
+# 
+kits:
+  danny:
+    delay: 3000
+    items:
+      -
+        type: diamondsword
+        quantity: 1
+        enchants:
+          - sharpness 5
+          - unbreaking 3
+        name: '&5&nEnd Sword'
+        lore:
+          - '&cLine 1'
+          - 'Danny Kits Example'
+        data:
+          -
+            SomePlugin:
+              Key_Name: 'Value'
+          - 
+            JerCore:
+              IsJerItem: true
+      -
+        type: woodaxe
+        quantity: 1
+        name: 'axe lol'
+    money: 500.0
+    commands:
+      - '/bc {PLAYER} just used the {KIT} kit!'
+      - '/ban {PLAYER} idot'
+

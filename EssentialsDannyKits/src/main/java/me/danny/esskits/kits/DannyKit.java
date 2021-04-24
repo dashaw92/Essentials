@@ -1,7 +1,9 @@
-package me.danny.essapi.kits;
+package me.danny.esskits.kits;
 
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import me.danny.essapi.KitDelay;
+import me.danny.essapi.KitProvider;
 import net.ess3.api.IEssentials;
 
 import java.util.List;

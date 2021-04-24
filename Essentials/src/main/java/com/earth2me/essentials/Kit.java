@@ -1,16 +1,14 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.Trade.OverflowType;
-import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
-import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.ItemUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
-import me.danny.essapi.kits.KitProvider;
+import me.danny.essapi.KitProvider;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
 import org.bukkit.Bukkit;
@@ -20,8 +18,6 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;

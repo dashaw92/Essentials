@@ -1,4 +1,5 @@
-package me.danny.essapi.kits;
+
+package me.danny.essapi;
 
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;

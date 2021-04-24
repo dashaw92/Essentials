@@ -1,0 +1,15 @@
+# This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
+name: EssentialsdDannyKits
+main: me.danny.esskits.DannyKits
+# Note to developers: This next line cannot change, or the automatic versioning system will break.
+version: ${full.version}
+website: https://essentialsx.net/
+description: Overhauls the Essentials kits config and API
+authors: [Danny]
+depend: [Essentials]
+api-version: 1.16
+commands:
+  migratekits:
+    description: Migrates kits from the old config file to the new format
+    usage: /<command> [kit to migrate]
+    aliases: [emigrate, emigratekits, emigratekit]
